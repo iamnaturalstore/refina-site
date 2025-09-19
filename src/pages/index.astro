@@ -1,11 +1,26 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ParallaxImg from '../components/ParallaxImg.jsx';
 ---
+<BaseLayout>
+  <section class="relative overflow-hidden bg-gradient-to-b from-violet-900 to-violet-700 text-white">
+    <div class="container-max py-28 relative z-10">
+      <p class="kicker text-violet-200">Refina</p>
+      <h1 class="h1">Expert recommendations. Zero guesswork.</h1>
+      <p class="p mt-3 text-violet-100 max-w-xl">Like Porsche minimalism meets Firebase clarity.</p>
+    </div>
 
-<Layout>
-	<Welcome />
-</Layout>
+    <!-- Parallax layers -->
+    <div class="absolute inset-0 pointer-events-none">
+      <div class="absolute left-[5%] top-[20%] w-56 opacity-70">
+        <ParallaxImg client:load src="/images/shape-1.webp" alt="" speed={0.10} className="rounded-2xl shadow-lg" />
+      </div>
+      <div class="absolute right-[8%] top-[35%] w-72 opacity-80">
+        <ParallaxImg client:load src="/images/shape-2.webp" alt="" speed={-0.08} className="rounded-2xl shadow-lg" />
+      </div>
+      <div class="absolute left-1/2 -translate-x-1/2 bottom-[5%] w-[44rem] opacity-90">
+        <ParallaxImg client:load src="/images/concierge-ui.webp" alt="Refina UI" speed={0.05} className="rounded-3xl shadow-2xl ring-1 ring-white/10" />
+      </div>
+    </div>
+  </section>
+</BaseLayout>

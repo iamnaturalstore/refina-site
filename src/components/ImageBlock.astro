@@ -1,0 +1,11 @@
+---
+const { src, alt = '', caption = '', className = '' } = Astro.props;
+---
+<figure class={`overflow-hidden rounded-2xl shadow-sm ${className}`}>
+  <img src={src} alt={alt} loading="lazy" decoding="async" class="w-full h-auto block" />
+  {caption && (
+    <figcaption class="p-3 text-sm text-gray-600 bg-white/70 backdrop-blur">
+      {caption}
+    </figcaption>
+  )}
+</figure>

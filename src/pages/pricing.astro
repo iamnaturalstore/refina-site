@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import InstallCTA from '../components/InstallCTA.astro';
+---
+<BaseLayout title="Pricing — Refina" description="Start free. Upgrade when you’re ready for Premium AI and analytics.">
+<section class="container-max py-16">
+<h1 class="h1">Pricing</h1>
+<div class="grid md:grid-cols-2 gap-6 mt-8">
+<div class="card">
+<h2 class="h2">Free</h2>
+<p class="p">Great for trying Refina. Manual matching, no AI.</p>
+<ul class="mt-4 list-disc pl-6 text-gray-700">
+<li>Basic product matching</li>
+<li>Theme embed</li>
+</ul>
+</div>
+<div class="card border-brand-400">
+<h2 class="h2">Premium</h2>
+<p class="p">Full AI concierge + analytics.</p>
+<ul class="mt-4 list-disc pl-6 text-gray-700">
+<li>AI recommendations (Gemini)</li>
+<li>Analytics dashboard</li>
+<li>Styling controls</li>
+</ul>
+<InstallCTA />
+</div>
+</div>
+</section>
+</BaseLayout>

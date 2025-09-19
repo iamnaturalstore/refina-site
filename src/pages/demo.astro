@@ -1,0 +1,13 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import DemoIsland from '../components/DemoIsland.jsx';
+---
+<BaseLayout title="Demo — Refina" description="Try a quick, interactive taste of Refina’s concierge.">
+<section class="container-max py-16">
+<h1 class="h1">Live Demo</h1>
+<p class="p mt-2">This interactive demo simulates a concierge reply. In your store, it connects to your catalogue.</p>
+<div class="mt-8">
+<DemoIsland client:load />
+</div>
+</section>
+</BaseLayout>

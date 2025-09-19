@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://refina.app/sitemap-index.xml

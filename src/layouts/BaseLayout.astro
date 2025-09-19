@@ -1,0 +1,65 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const {
+title = 'Refina — AI Product Recommender for Shopify',
+description = 'Turn shopper fatigue into add‑to‑cart moments with instant, expert product recommendations.',
+ogImage = '/og-refina.jpg',
+structuredData = true,
+} = Astro.props;
+
+const url = new URL(Astro.url.pathname, 'https://refina.app');
+---
+<!doctype html>
+<html lang="en" class="h-full bg-white">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="canonical" href={url.href} />
+
+<!-- Open Graph -->
+<meta property="og:site_name" content="Refina" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:type" content="website" />
+<meta property="og:url" content={url.href} />
+<meta property="og:image" content={ogImage} />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+
+{structuredData && (
+<script type="application/ld+json" is:inline>
+{JSON.stringify({
+'@context': 'https://schema.org',
+'@type': 'SoftwareApplication',
+name: 'Refina',
+applicationCategory: 'BusinessApplication',
+operatingSystem: 'Web',
+description,
+url: 'https://refina.app',
+image: 'https://refina.app/og-refina.jpg',
+offers: [
+{ '@type': 'Offer', name: 'Free', price: '0.00', priceCurrency: 'USD' },
+{ '@type': 'Offer', name: 'Premium', price: '29.00', priceCurrency: 'USD' }
+]
+})}
+</script>
+)}
+</head>
+<body class="min-h-screen flex flex-col">
+<Header />
+<main class="flex-1">
+<slot />
+</main>
+<Footer />
+</body>
+</html>

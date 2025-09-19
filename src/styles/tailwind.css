@@ -1,7 +1,7 @@
 /* Tailwind layers already here via @tailwind directives */
 
 /* Refina helpers */
-:root { --ring: theme(colors.violet.600); }
+:root { --ring: #7c3aed; }
 
 .container-max { @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8; }
 .btn-primary { @apply inline-flex items-center gap-2 rounded-xl bg-violet-700 text-white px-5 py-3 font-semibold shadow-sm hover:bg-violet-800 focus:outline-none focus:ring-2 focus:ring-offset-2; }

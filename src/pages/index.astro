@@ -3,23 +3,37 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import ParallaxImg from '../components/ParallaxImg.jsx';
 ---
 <BaseLayout>
-  <section class="relative overflow-hidden bg-gradient-to-b from-violet-900 to-violet-700 text-white">
-    <div class="container-max py-28 relative z-10">
-      <p class="kicker text-violet-200">Refina</p>
-      <h1 class="h1">Expert recommendations. Zero guesswork.</h1>
-      <p class="p mt-3 text-violet-100 max-w-xl">Like Porsche minimalism meets Firebase clarity.</p>
+  <section class="relative overflow-hidden min-h-[72svh] bg-gradient-to-br from-[#6e53b3] via-[#7c3aed] to-[#8a3cf6] pb-24 mb-[-6rem]">
+    <!-- overlays -->
+    <div class="hero-scrim absolute inset-0"></div>
+    <div class="hero-noise absolute inset-0 pointer-events-none"></div>
+
+    <!-- content -->
+    <div class="relative z-20 on-hero container-max py-28">
+      <div class="max-w-3xl">
+        <p class="kicker text-white/70">Refina</p>
+        <h1 class="h1">Expert recommendations. Zero guesswork.</h1>
+        <p class="p mt-4">Like Porsche minimalism meets Firebase clarity.</p>
+
+        <div class="mt-8 flex items-center gap-3">
+          <a href="/pricing" class="btn-primary">Install</a>
+          <a href="/demo" class="btn-ghost">View demo</a>
+        </div>
+      </div>
     </div>
 
-    <!-- Parallax layers -->
+    <!-- artwork / parallax -->
     <div class="absolute inset-0 pointer-events-none">
-      <div class="absolute left-[5%] top-[20%] w-56 opacity-70">
-        <ParallaxImg client:load src="/images/shape-1.webp" alt="" speed={0.10} className="rounded-2xl shadow-lg" />
+      <div class="absolute left-[5%] top-[18%] w-56 opacity-70 blur-[1px]">
+        <ParallaxImg client:load src="/images/shape-1.webp" alt="" speed={0.10} className="rounded-2xl shadow-lg" aria-hidden="true" />
       </div>
-      <div class="absolute right-[8%] top-[35%] w-72 opacity-80">
-        <ParallaxImg client:load src="/images/shape-2.webp" alt="" speed={-0.08} className="rounded-2xl shadow-lg" />
+
+      <div class="absolute right-[8%] top-[30%] w-72 opacity-60 blur-md">
+        <ParallaxImg client:load src="/images/shape-2.webp" alt="" speed={-0.08} className="rounded-2xl shadow-lg" aria-hidden="true" />
       </div>
-      <div class="absolute left-1/2 -translate-x-1/2 bottom-[5%] w-[44rem] opacity-90">
-        <ParallaxImg client:load src="/images/concierge-ui.webp" alt="Refina UI" speed={0.05} className="rounded-3xl shadow-2xl ring-1 ring-white/10" />
+
+      <div class="absolute right-[-6rem] md:right-0 top-10 md:top-0 w-[44rem] md:w-[52rem] opacity-80">
+        <ParallaxImg client:load src="/images/concierge-ui.webp" alt="Refina UI preview" speed={0.05} className="rounded-3xl shadow-2xl ring-1 ring-white/10" />
       </div>
     </div>
   </section>

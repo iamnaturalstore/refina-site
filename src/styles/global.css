@@ -22,3 +22,11 @@
 
 .p    { @apply text-base text-gray-600; }
 .card { @apply rounded-2xl border border-gray-200 bg-white p-6 shadow-sm; }
+
+/* Hero contrast & texture */
+.hero-scrim { background: linear-gradient(to right, rgb(0 0 0 / .35), rgb(0 0 0 / .06), transparent); }
+.hero-noise { background-image: radial-gradient(rgb(255 255 255 / .06) 1px, transparent 1px); background-size: 3px 3px; mix-blend: overlay; }
+
+/* Flip text colors when on dark hero */
+.on-hero .h1, .on-hero .h2 { color: #fff; }
+.on-hero .p { color: rgb(255 255 255 / .82); }

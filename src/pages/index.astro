@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ParallaxImg from '../components/ParallaxImg.jsx';
+import TiltCard from '../components/TiltCard.jsx';
 ---
 <BaseLayout>
   <!-- Firebase-style hero -->
@@ -49,6 +50,91 @@ import ParallaxImg from '../components/ParallaxImg.jsx';
       </div>
     </div>
   </section>
+
+    <!-- features: Firebase-style card grid -->
+  <section class="relative z-30 bg-gradient-to-b from-[#0c1e3b] to-[#0a1830] py-20 md:py-28">
+    <div class="hero-noise absolute inset-0 opacity-50 pointer-events-none"></div>
+
+    <div class="container-max relative">
+      <div class="max-w-3xl">
+        <p class="kicker text-white/70">Why Refina</p>
+        <h2 class="h2 text-white">Guide every shopper to the right product</h2>
+        <p class="p mt-3 text-white/75">
+          Ingredient-aware, intent-aware suggestions that feel like a pro beside them.
+        </p>
+      </div>
+
+      <!-- tile grid -->
+      <div class="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        <!-- Intent -->
+        <article class="group relative rounded-2xl border border-white/10 bg-white/5 p-1 transform-gpu transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_30px_120px_rgba(0,0,0,.35)]">
+          <div class="rounded-2xl bg-[#0f2245]/60 p-5 h-full">
+            <TiltCard client:load className="aspect-[16/10] shadow-2xl">
+              <img
+                src="/images/feature-intent.webp"
+                alt="AI understands shopper intent with topic tags and search focus"
+                class="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </TiltCard>
+
+            <div class="mt-5">
+              <p class="kicker text-white/70">Intent</p>
+              <h3 class="text-white font-semibold text-lg">Understands what they really want</h3>
+              <p class="p mt-2 text-white/75">Contextual tags and clarifying questions reduce friction.</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- Products -->
+        <article class="group relative rounded-2xl border border-white/10 bg-white/5 p-1 transform-gpu transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_30px_120px_rgba(0,0,0,.35)]">
+          <div class="rounded-2xl bg-[#0f2245]/60 p-5 h-full">
+            <TiltCard client:load className="aspect-[16/10] shadow-2xl">
+              <img
+                src="/images/feature-intent.webp"
+                alt="AI understands shopper intent with topic tags and search focus"
+                class="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </TiltCard>
+
+            <div class="mt-5">
+              <p class="kicker text-white/70">Curation</p>
+              <h3 class="text-white font-semibold text-lg">Matches products to the brief</h3>
+              <p class="p mt-2 text-white/75">Picks the best SKUs by ingredients, concerns, and constraints.</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- Convert -->
+        <article class="group relative rounded-2xl border border-white/10 bg-white/5 p-1 transform-gpu transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_30px_120px_rgba(0,0,0,.35)]">
+          <div class="rounded-2xl bg-[#0f2245]/60 p-5 h-full">
+            <TiltCard client:load className="aspect-[16/10] shadow-2xl">
+              <img
+                src="/images/feature-intent.webp"
+                alt="AI understands shopper intent with topic tags and search focus"
+                class="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </TiltCard>
+
+            <div class="mt-5">
+              <p class="kicker text-white/70">Conversion</p>
+              <h3 class="text-white font-semibold text-lg">Reduces decision fatigue</h3>
+              <p class="p mt-2 text-white/75">Clear next steps and confident picks increase add-to-cart.</p>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- subtle CTA under tiles -->
+      <div class="mt-10 flex items-center gap-3">
+        <a href="/pricing" class="btn-primary">Install Refina</a>
+        <a href="/demo" class="btn-ghost text-white/90 hover:bg-white/10">See live demo</a>
+      </div>
+    </div>
+  </section>
+
 
   <!-- features start slightly overlapping the hero -->
   <div class="relative -mt-16 md:-mt-24"></div>

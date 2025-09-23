@@ -3,38 +3,53 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import ParallaxImg from '../components/ParallaxImg.jsx';
 ---
 <BaseLayout>
-  <section class="relative overflow-hidden min-h-[72svh] bg-gradient-to-br from-[#6e53b3] via-[#7c3aed] to-[#8a3cf6] pb-24 mb-[-6rem]">
-    <!-- overlays -->
-    <div class="hero-scrim absolute inset-0"></div>
-    <div class="hero-noise absolute inset-0 pointer-events-none"></div>
+  <!-- Firebase-style hero -->
+  <section class="relative overflow-hidden min-h-[80svh] bg-gradient-to-br from-[#071022] via-[#0b1f3f] to-[#0e2a55] pb-28 md:pb-36">
+    <!-- ambient glow orbs -->
+    <div class="pointer-events-none absolute -top-24 -left-24 size-[36rem] rounded-full bg-[radial-gradient(closest-side,rgba(76,132,255,.28),transparent)] blur-3xl"></div>
+    <div class="pointer-events-none absolute -bottom-16 -right-20 size-[32rem] rounded-full bg-[radial-gradient(closest-side,rgba(153,89,255,.18),transparent)] blur-3xl"></div>
 
-    <!-- content -->
-    <div class="relative z-20 on-hero container-max py-28">
+    <!-- star/texture + scrim -->
+    <div class="hero-noise absolute inset-0 opacity-70 mix-blend-soft-light"></div>
+    <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,.06)_0%,transparent_30%)]"></div>
+
+    <!-- headline -->
+    <div class="relative z-20 container-max pt-28 md:pt-36">
       <div class="max-w-3xl">
         <p class="kicker text-white/70">Refina</p>
-        <h1 class="h1">Expert recommendations. Zero guesswork.</h1>
-        <p class="p mt-4">Like Porsche minimalism meets Firebase clarity.</p>
-
+        <h1 class="h1 text-white">Expert recommendations. Zero guesswork.</h1>
+        <p class="p mt-4 text-white/80">
+          Firebase-clean clarity with layered UI that floats as you scroll.
+        </p>
         <div class="mt-8 flex items-center gap-3">
           <a href="/pricing" class="btn-primary">Install</a>
-          <a href="/demo" class="btn-ghost">View demo</a>
+          <a href="/demo" class="btn-ghost text-white/90 hover:bg-white/10">View demo</a>
         </div>
       </div>
     </div>
 
-    <!-- artwork / parallax -->
+    <!-- floating screenshots (parallax layers) -->
     <div class="absolute inset-0 pointer-events-none">
-      <div class="absolute left-[5%] top-[18%] w-56 opacity-70 blur-[1px]">
-        <ParallaxImg client:load src="/images/shape-1.webp" alt="" speed={0.10} className="rounded-2xl shadow-lg" aria-hidden="true" />
+      <!-- back panel (small) -->
+      <div class="absolute left-[6%] top-[28%] w-[18rem] md:w-[22rem] rotate-[-6deg] opacity-70">
+        <ParallaxImg client:load src="/images/shape-1.webp" alt="" speed={-0.05}
+          className="rounded-2xl shadow-2xl ring-1 ring-white/10" aria-hidden="true" />
       </div>
 
-      <div class="absolute right-[8%] top-[30%] w-72 opacity-60 blur-md">
-        <ParallaxImg client:load src="/images/shape-2.webp" alt="" speed={-0.08} className="rounded-2xl shadow-lg" aria-hidden="true" />
+      <!-- main UI card -->
+      <div class="absolute left-1/2 -translate-x-1/2 top-[34%] w-[42rem] md:w-[56rem] rotate-[2deg] opacity-95">
+        <ParallaxImg client:load src="/images/concierge-ui.webp" alt="Refina UI preview"
+          speed={0.06} className="rounded-3xl shadow-[0_30px_120px_rgba(0,0,0,.45)] ring-1 ring-white/10" />
       </div>
 
-      <div class="absolute right-[-6rem] md:right-0 top-10 md:top-0 w-[44rem] md:w-[52rem] opacity-80">
-        <ParallaxImg client:load src="/images/concierge-ui.webp" alt="Refina UI preview" speed={0.05} className="rounded-3xl shadow-2xl ring-1 ring-white/10" />
+      <!-- front panel (tall) -->
+      <div class="absolute right-[6%] top-[22%] w-[16rem] md:w-[20rem] rotate-[8deg] opacity-80">
+        <ParallaxImg client:load src="/images/shape-2.webp" alt="" speed={0.12}
+          className="rounded-2xl shadow-2xl ring-1 ring-white/10" aria-hidden="true" />
       </div>
     </div>
   </section>
+
+  <!-- features start slightly overlapping the hero -->
+  <div class="relative -mt-16 md:-mt-24"></div>
 </BaseLayout>

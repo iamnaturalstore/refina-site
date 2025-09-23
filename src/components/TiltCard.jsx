@@ -2,11 +2,10 @@ import React, { useRef, useState } from "react";
 
 /**
  * Lightweight 3D tilt on hover.
- * - Props:
- *   - className: wrapper classes
- *   - maxTilt: degrees (default 10)
- *   - scale: zoom on hover (default 1.02)
- *   - shadow: extra shadow class on hover (optional)
+ * Usage:
+ * <TiltCard client:load className="aspect-[16/10] shadow-2xl">
+ *   <img src="/images/feature-intent.webp" class="w-full h-full object-cover" />
+ * </TiltCard>
  */
 export default function TiltCard({
   className = "",
@@ -16,19 +15,18 @@ export default function TiltCard({
   children,
 }) {
   const ref = useRef(null);
-  const [style, setStyle] = useState({});
+  const [style, setStyle] = useState({ transform: "perspective(1000px)" });
 
   const onMove = (e) => {
     const el = ref.current;
     if (!el) return;
-    // Respect reduced motion
     if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const rect = el.getBoundingClientRect();
-    const px = (e.clientX - rect.left) / rect.width;   // 0..1
-    const py = (e.clientY - rect.top) / rect.height;   // 0..1
-    const rx = (py - 0.5) * -2 * maxTilt;              // tiltX
-    const ry = (px - 0.5) *  2 * maxTilt;              // tiltY
+    const px = (e.clientX - rect.left) / rect.width;  // 0..1
+    const py = (e.clientY - rect.top) / rect.height;  // 0..1
+    const rx = (py - 0.5) * -2 * maxTilt;             // tiltX
+    const ry = (px - 0.5) *  2 * maxTilt;             // tiltY
 
     setStyle({
       transform: `perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) scale(${scale})`,

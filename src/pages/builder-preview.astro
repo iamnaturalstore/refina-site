@@ -1,18 +1,36 @@
 ---
 const key = import.meta.env.PUBLIC_BUILDER_API_KEY;
 const model = 'page';
-const targetUrl = new URL(Astro.request.url).searchParams.get('url') || '/';
+
+const params = new URL(Astro.request.url).searchParams;
+
+// Accept multiple param names Builder may use
+let targetUrl =
+  params.get('url') ||
+  params.get('urlPath') ||
+  '/';
+
+// If Builder literally passed `{url}` (placeholder) or includes it, fall back to root
+if (!targetUrl || targetUrl.includes('{url}')) targetUrl = '/';
+
+// Normalize: ensure it starts with a single leading slash
+if (!targetUrl.startsWith('/')) targetUrl = '/' + targetUrl;
+while (targetUrl !== '/' && targetUrl.startsWith('//')) {
+  targetUrl = targetUrl.slice(1);
+}
 ---
 <html lang="en">
-  <head><meta charset="utf-8" /><title>Builder Preview</title></head>
-  <body style="min-height:100vh">
+  <head>
+    <meta charset="utf-8" />
+    <title>Builder Preview</title>
+  </head>
+  <body>
     <builder-component
       model={model}
       api-key={key}
       data-url={targetUrl}
       preview
-      style="display:block;min-height:50vh"
     ></builder-component>
-    <script src="https://cdn.builder.io/js/webcomponents"></script>
+    <script async src="https://cdn.builder.io/js/webcomponents"></script>
   </body>
 </html>

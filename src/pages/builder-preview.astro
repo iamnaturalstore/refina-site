@@ -1,19 +1,17 @@
 ---
-const builderAPIpublicKey = import.meta.env.BUILDER_API_PUBLIC_KEY;
-// Use the name of your Builder model for pages. If you created a "Page" model, use "page".
-const builderModel = 'page';
+const key = import.meta.env.BUILDER_API_PUBLIC_KEY;
+const model = 'refina-home'; // use your actual model name if different
+const targetUrl = '/'; // preview the homepage content
 ---
-
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Builder Preview</title>
-  </head>
+  <head><meta charset="utf-8" /><title>Builder Preview</title></head>
   <body>
-    <!-- This tells Builder where to render your content -->
-    <builder-component model={builderModel} api-key={builderAPIpublicKey}></builder-component>
-
-    <!-- Builder web components (required for the Visual Editor preview) -->
+    <builder-component
+      model={model}
+      api-key={key}
+      data-url={targetUrl}
+      preview
+    ></builder-component>
     <script async src="https://cdn.builder.io/js/webcomponents"></script>
   </body>
 </html>

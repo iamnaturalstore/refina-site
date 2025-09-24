@@ -1,36 +1,82 @@
 ---
+/**
+ * builder-preview.astro
+ * Safe, no-rewrite Builder.io preview page for Astro.
+ */
+
 const key = import.meta.env.PUBLIC_BUILDER_API_KEY;
-const model = 'page';
 
+// Allow overriding the model from the querystring; default to "page"
 const params = new URL(Astro.request.url).searchParams;
+const incomingModel = (params.get("model") || "").trim().toLowerCase();
+const model = ["page", "section", "symbol"].includes(incomingModel) ? incomingModel : "page";
 
-// Accept multiple param names Builder may use
-let targetUrl =
-  params.get('url') ||
-  params.get('urlPath') ||
-  '/';
+// Accept multiple param names Builder might send for the target path
+let targetUrl = params.get("url") || params.get("urlPath") || params.get("path") || "/";
 
-// If Builder literally passed `{url}` (placeholder) or includes it, fall back to root
-if (!targetUrl || targetUrl.includes('{url}')) targetUrl = '/';
-
-// Normalize: ensure it starts with a single leading slash
-if (!targetUrl.startsWith('/')) targetUrl = '/' + targetUrl;
-while (targetUrl !== '/' && targetUrl.startsWith('//')) {
-  targetUrl = targetUrl.slice(1);
+// Sanitize: replace placeholders, ensure leading slash, collapse duplicate slashes
+if (!targetUrl || /\{url\}/i.test(targetUrl)) targetUrl = "/";
+try {
+  // Strip origin if a full URL was passed
+  const asUrl = new URL(targetUrl, "http://preview.local");
+  targetUrl = asUrl.pathname + (asUrl.search || "");
+} catch {
+  /* ignore */
 }
+if (!targetUrl.startsWith("/")) targetUrl = "/" + targetUrl;
+while (targetUrl.length > 1 && targetUrl.startsWith("//")) targetUrl = targetUrl.slice(1);
+
+// Optional: global flag for your app to silence modals/redirects in preview.
+const previewFlagScript = `
+  (function () {
+    try { window.__BUILDER_PREVIEW__ = true; } catch (e) {}
+  })();
+`;
 ---
+
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <title>Builder Preview</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      html, body { height: 100%; margin: 0; }
+      body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      }
+      .preview-root { min-height: 100%; display: grid; align-items: start; justify-content: stretch; }
+    </style>
+    <script is:inline>{previewFlagScript}</script>
   </head>
   <body>
-    <builder-component
-      model={model}
-      api-key={key}
-      data-url={targetUrl}
-      preview
-    ></builder-component>
+    <div class="preview-root">
+      <builder-component
+        model={model}
+        api-key={key}
+        data-url={targetUrl}
+        preview
+      ></builder-component>
+    </div>
+
+    <!-- Builder web components -->
     <script async src="https://cdn.builder.io/js/webcomponents"></script>
+
+    <!-- Safe diagnostics: reads attributes directly (no %s placeholders). Remove if undesired. -->
+    <script is:inline>
+      (function () {
+        try {
+          var el = document.querySelector('builder-component');
+          if (el) {
+            console.debug('[builder-preview]', {
+              model: el.getAttribute('model'),
+              url: el.getAttribute('data-url')
+            });
+          }
+        } catch (e) {}
+      })();
+    </script>
   </body>
 </html>

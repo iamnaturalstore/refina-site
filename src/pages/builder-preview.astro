@@ -1,12 +1,19 @@
 ---
-const key = import.meta.env.PUBLIC_BUILDER_API_KEY; // <-- PUBLIC_ prefix
+const key = import.meta.env.PUBLIC_BUILDER_API_KEY;
 const model = 'page';
-const targetUrl = '/';
+
+// read ?url=/something from the query string, default to '/'
+const targetUrl = new URL(Astro.request.url).searchParams.get('url') || '/';
 ---
 <html lang="en">
   <head><meta charset="utf-8" /><title>Builder Preview</title></head>
   <body>
-    <builder-component model={model} api-key={key} data-url={targetUrl} preview></builder-component>
+    <builder-component
+      model={model}
+      api-key={key}
+      data-url={targetUrl}
+      preview
+    ></builder-component>
     <script async src="https://cdn.builder.io/js/webcomponents"></script>
   </body>
 </html>

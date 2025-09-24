@@ -1,37 +1,25 @@
 ---
+// src/pages/builder-preview.astro
 /**
- * builder-preview.astro
- * Safe, no-rewrite Builder.io preview page for Astro.
+ * Safe Builder.io preview page for Astro (no URL rewrites).
  */
 
 const key = import.meta.env.PUBLIC_BUILDER_API_KEY;
 
-// Allow overriding the model from the querystring; default to "page"
+// Query params
 const params = new URL(Astro.request.url).searchParams;
 const incomingModel = (params.get("model") || "").trim().toLowerCase();
 const model = ["page", "section", "symbol"].includes(incomingModel) ? incomingModel : "page";
 
-// Accept multiple param names Builder might send for the target path
+// Accept url/urlPath/path; default "/"
 let targetUrl = params.get("url") || params.get("urlPath") || params.get("path") || "/";
-
-// Sanitize: replace placeholders, ensure leading slash, collapse duplicate slashes
 if (!targetUrl || /\{url\}/i.test(targetUrl)) targetUrl = "/";
 try {
-  // Strip origin if a full URL was passed
-  const asUrl = new URL(targetUrl, "http://preview.local");
-  targetUrl = asUrl.pathname + (asUrl.search || "");
-} catch {
-  /* ignore */
-}
+  const u = new URL(targetUrl, "http://preview.local");
+  targetUrl = u.pathname + (u.search || "");
+} catch {}
 if (!targetUrl.startsWith("/")) targetUrl = "/" + targetUrl;
 while (targetUrl.length > 1 && targetUrl.startsWith("//")) targetUrl = targetUrl.slice(1);
-
-// Optional: global flag for your app to silence modals/redirects in preview.
-const previewFlagScript = `
-  (function () {
-    try { window.__BUILDER_PREVIEW__ = true; } catch (e) {}
-  })();
-`;
 ---
 
 <html lang="en">
@@ -47,9 +35,13 @@ const previewFlagScript = `
         -moz-osx-font-smoothing: grayscale;
         font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
       }
-      .preview-root { min-height: 100%; display: grid; align-items: start; justify-content: stretch; }
+      .preview-root { min-height: 100%; display: grid; }
+      #builder-preview-status {
+        position: fixed; bottom: 8px; left: 8px; font: 12px/1.4 ui-sans-serif, system-ui;
+        background: #fff; padding: 6px 8px; border: 1px solid #ddd; border-radius: 6px;
+        box-shadow: 0 1px 4px rgba(0,0,0,.06); color: #333; z-index: 9999; display:none;
+      }
     </style>
-    <script is:inline>{previewFlagScript}</script>
   </head>
   <body>
     <div class="preview-root">
@@ -62,21 +54,35 @@ const previewFlagScript = `
     </div>
 
     <!-- Builder web components -->
-    <script async src="https://cdn.builder.io/js/webcomponents"></script>
+    <script src="https://cdn.builder.io/js/webcomponents"></script>
 
-    <!-- Safe diagnostics: reads attributes directly (no %s placeholders). Remove if undesired. -->
+    <!-- Minimal diagnostics (shows only if something is wrong) -->
     <script is:inline>
       (function () {
-        try {
-          var el = document.querySelector('builder-component');
-          if (el) {
-            console.debug('[builder-preview]', {
-              model: el.getAttribute('model'),
-              url: el.getAttribute('data-url')
-            });
-          }
-        } catch (e) {}
+        function show(msg) {
+          try {
+            console.warn('[builder-preview]', msg);
+            var el = document.getElementById('builder-preview-status');
+            if (el) { el.style.display = 'block'; el.textContent = msg; }
+          } catch (e) {}
+        }
+        var comp = document.querySelector('builder-component');
+        if (!comp) return show('builder-component missing');
+        var key = comp.getAttribute('api-key');
+        if (!key) show('Missing PUBLIC_BUILDER_API_KEY on builder-component.');
+
+        // If no content renders within 3s, surface a hint.
+        setTimeout(function () {
+          try {
+            // Builder sets class "builder-no-content-found" when API returns empty results
+            if (comp.classList.contains('builder-no-content-found')) {
+              show('No content found for model="' + comp.getAttribute('model') + '" at url="' + comp.getAttribute('data-url') + '". Check URL targeting and publish status in Builder.');
+            }
+          } catch (e) {}
+        }, 3000);
       })();
     </script>
+
+    <div id="builder-preview-status"></div>
   </body>
 </html>

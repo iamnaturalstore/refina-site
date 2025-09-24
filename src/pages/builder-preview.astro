@@ -1,17 +1,12 @@
 ---
 const key = import.meta.env.BUILDER_API_PUBLIC_KEY;
-const model = 'refina-home-page'; // use your actual model name if different
-const targetUrl = '/'; // preview the homepage content
+const model = 'page';                 // ← use the model your entry is in
+const targetUrl = '/refina-app-home-page'; // ← entry URL (for now)
 ---
 <html lang="en">
   <head><meta charset="utf-8" /><title>Builder Preview</title></head>
   <body>
-    <builder-component
-      model={model}
-      api-key={key}
-      data-url={targetUrl}
-      preview
-    ></builder-component>
+    <builder-component model={model} api-key={key} data-url={targetUrl} preview></builder-component>
     <script async src="https://cdn.builder.io/js/webcomponents"></script>
   </body>
 </html>

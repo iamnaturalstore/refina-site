@@ -5,7 +5,6 @@ const params = new URL(Astro.request.url).searchParams;
 const incomingModel = (params.get("model") || "").trim().toLowerCase();
 const model = ["page", "section", "symbol"].includes(incomingModel) ? incomingModel : "page";
 
-// Accept url/urlPath/path; default "/"
 let targetUrl = params.get("url") || params.get("urlPath") || params.get("path") || "/";
 if (!targetUrl || /\{url\}/i.test(targetUrl)) targetUrl = "/";
 try {
@@ -15,7 +14,7 @@ try {
 if (!targetUrl.startsWith("/")) targetUrl = "/" + targetUrl;
 while (targetUrl.length > 1 && targetUrl.startsWith("//")) targetUrl = targetUrl.slice(1);
 
-// Prepare userAttributes for Builder targeting (send BOTH url and urlPath)
+// 👇 send BOTH url and urlPath
 const userAttributes = JSON.stringify({ url: targetUrl, urlPath: targetUrl });
 ---
 
@@ -25,22 +24,15 @@ const userAttributes = JSON.stringify({ url: targetUrl, urlPath: targetUrl });
     <title>Builder Preview</title>
     <meta name="robots" content="noindex, nofollow" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <style>
-      html, body { height: 100%; margin: 0; }
-      body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
-      .preview-root { min-height: 100%; display: grid; }
-    </style>
   </head>
   <body>
-    <div class="preview-root">
-      <builder-component
-        model={model}
-        api-key={key}
-        data-url={targetUrl}
-        user-attributes={userAttributes}
-        preview
-      ></builder-component>
-    </div>
+    <builder-component
+      model={model}
+      api-key={key}
+      data-url={targetUrl}
+      user-attributes={userAttributes}
+      preview
+    ></builder-component>
 
     <script src="https://cdn.builder.io/js/webcomponents"></script>
   </body>

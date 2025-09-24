@@ -1,13 +1,16 @@
 ---
-// Minimal, robust Builder.io preview page for Astro (no rewrites, no inline JS).
+// src/pages/builder-preview.astro
+// Minimal Builder.io preview page for Astro — no inline scripts, no rewrites.
 
 const key = import.meta.env.PUBLIC_BUILDER_API_KEY;
 
 const params = new URL(Astro.request.url).searchParams;
-const incomingModel = (params.get("model") || "").trim().toLowerCase();
-const model = ["page", "section", "symbol"].includes(incomingModel) ? incomingModel : "page";
 
-// Accept url/urlPath/path; default "/"
+// Model name (defaults to "page")
+const incomingModel = (params.get("model") || "").trim();
+const model = incomingModel ? incomingModel : "page";
+
+// Resolve the target URL from common param names; default "/"
 let targetUrl = params.get("url") || params.get("urlPath") || params.get("path") || "/";
 if (!targetUrl || /\{url\}/i.test(targetUrl)) targetUrl = "/";
 try {
@@ -17,10 +20,10 @@ try {
 if (!targetUrl.startsWith("/")) targetUrl = "/" + targetUrl;
 while (targetUrl.length > 1 && targetUrl.startsWith("//")) targetUrl = targetUrl.slice(1);
 
-// Optional: force a specific entry (bypasses targeting completely)
+// Optional: explicit content to render (bypasses targeting)
 const entry = (params.get("entry") || "").trim();
 
-// Send BOTH attributes; your space matches on urlPath
+// Send BOTH attributes; your space responds to urlPath
 const userAttributes = JSON.stringify({ url: targetUrl, urlPath: targetUrl });
 ---
 
@@ -38,9 +41,11 @@ const userAttributes = JSON.stringify({ url: targetUrl, urlPath: targetUrl });
       data-url={targetUrl}
       user-attributes={userAttributes}
       entry={entry}
+      content-id={entry}
       preview
     ></builder-component>
 
+    <!-- Builder web components -->
     <script src="https://cdn.builder.io/js/webcomponents"></script>
   </body>
 </html>

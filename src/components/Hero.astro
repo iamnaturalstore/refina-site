@@ -1,0 +1,53 @@
+---
+import ParallaxImg from '../components/ParallaxImg.jsx';
+
+export interface Props {
+  kicker: string;
+  heading: string;
+  sub: string;
+  primaryCta?: { label: string; href: string };
+  secondaryCta?: { label: string; href: string };
+  art?: { main: string; bg1?: string; bg2?: string };
+}
+const { kicker, heading, sub, primaryCta, secondaryCta, art } = Astro.props;
+---
+<section class="relative overflow-hidden min-h-[80svh] bg-gradient-to-br from-[#071022] via-[#0b1f3f] to-[#0e2a55] pb-28 md:pb-36">
+  <!-- ambient glows -->
+  <div class="pointer-events-none absolute -top-24 -left-24 size-[36rem] rounded-full bg-[radial-gradient(closest-side,rgba(76,132,255,.28),transparent)] blur-3xl"></div>
+  <div class="pointer-events-none absolute -bottom-16 -right-20 size-[32rem] rounded-full bg-[radial-gradient(closest-side,rgba(153,89,255,.18),transparent)] blur-3xl"></div>
+
+  <!-- texture -->
+  <div class="hero-noise absolute inset-0 opacity-50 mix-blend-soft-light"></div>
+
+  <!-- copy -->
+  <div class="relative z-20 container-max pt-28 md:pt-36">
+    <div class="max-w-3xl">
+      <p class="kicker text-white/70">{kicker}</p>
+      <h1 class="h1 text-white">{heading}</h1>
+      <p class="p mt-4 text-white/80">{sub}</p>
+      <div class="mt-8 flex items-center gap-3">
+        {primaryCta && <a href={primaryCta.href} class="btn-primary">{primaryCta.label}</a>}
+        {secondaryCta && <a href={secondaryCta.href} class="btn-ghost text-white/90 hover:bg-white/10">{secondaryCta.label}</a>}
+      </div>
+    </div>
+  </div>
+
+  <!-- layered art (parallax) -->
+  <div class="absolute inset-0 pointer-events-none">
+    {art?.bg1 && (
+      <div class="absolute left-[6%] top-[28%] w-[18rem] md:w-[22rem] rotate-[-6deg] opacity-70">
+        <ParallaxImg client:load src={art.bg1} alt="" speed={-0.05} className="rounded-2xl shadow-2xl ring-1 ring-white/10" aria-hidden="true" />
+      </div>
+    )}
+    {art?.main && (
+      <div class="absolute left-1/2 -translate-x-1/2 top-[34%] w-[42rem] md:w-[56rem] rotate-[2deg] opacity-95">
+        <ParallaxImg client:load src={art.main} alt="Refina UI preview" speed={0.06} className="rounded-3xl shadow-[0_30px_120px_rgba(0,0,0,.45)] ring-1 ring-white/10" />
+      </div>
+    )}
+    {art?.bg2 && (
+      <div class="absolute right-[6%] top-[22%] w-[16rem] md:w-[20rem] rotate-[8deg] opacity-80">
+        <ParallaxImg client:load src={art.bg2} alt="" speed={0.12} className="rounded-2xl shadow-2xl ring-1 ring-white/10" aria-hidden="true" />
+      </div>
+    )}
+  </div>
+</section>

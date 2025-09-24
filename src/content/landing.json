@@ -1,0 +1,50 @@
+{
+  "hero": {
+    "kicker": "Refina",
+    "heading": "Expert recommendations. Zero guesswork.",
+    "sub": "Guide shoppers to the right product with AI that understands intent.",
+    "primaryCta": { "label": "Install", "href": "/pricing" },
+    "secondaryCta": { "label": "View demo", "href": "/demo" },
+    "art": {
+      "main": "/images/concierge-ui.webp",
+      "bg1": "/images/shape-1.webp",
+      "bg2": "/images/shape-2.webp"
+    }
+  },
+  "sections": [
+    {
+      "type": "feature",
+      "theme": "dark",
+      "kicker": "Intent",
+      "heading": "Understands what they really want",
+      "body": "Contextual tags and clarifying questions reduce friction.",
+      "image": "/images/feature-intent.webp",
+      "imageSide": "right"
+    },
+    {
+      "type": "feature",
+      "theme": "dark",
+      "kicker": "Curation",
+      "heading": "Matches products to the brief",
+      "body": "Picks the best SKUs by ingredients, concerns, and constraints.",
+      "image": "/images/feature-products.webp",
+      "imageSide": "left"
+    },
+    {
+      "type": "feature",
+      "theme": "dark",
+      "kicker": "Conversion",
+      "heading": "Reduces decision fatigue",
+      "body": "Clear next steps and confident picks increase add-to-cart.",
+      "image": "/images/feature-convert.webp",
+      "imageSide": "right"
+    },
+    {
+      "type": "cta",
+      "theme": "dark",
+      "heading": "Ready to see it on your store?",
+      "primaryCta": { "label": "Install Refina", "href": "/pricing" },
+      "secondaryCta": { "label": "See live demo", "href": "/demo" }
+    }
+  ]
+}

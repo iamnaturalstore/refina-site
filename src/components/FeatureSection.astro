@@ -1,0 +1,48 @@
+---
+import TiltCard from '../components/TiltCard.jsx';
+
+export interface Props {
+  theme?: 'dark' | 'light';
+  kicker?: string;
+  heading: string;
+  body?: string;
+  image: string;
+  imageSide?: 'left' | 'right';
+}
+const { theme = 'dark', kicker, heading, body, image, imageSide = 'right' } = Astro.props;
+const isImageLeft = imageSide === 'left';
+const sectionBg = theme === 'dark'
+  ? 'bg-gradient-to-b from-[#0c1e3b] to-[#0a1830]'
+  : 'bg-white';
+const textColor = theme === 'dark' ? 'text-white' : 'text-gray-900';
+const subColor = theme === 'dark' ? 'text-white/75' : 'text-gray-600';
+---
+<section class={`relative ${sectionBg} py-20 md:py-28`}>
+  {theme === 'dark' && <div class="hero-noise absolute inset-0 opacity-40 pointer-events-none"></div>}
+
+  <div class="container-max relative">
+    <div class={`grid items-center gap-10 md:gap-16 ${isImageLeft ? 'md:grid-cols-[1.1fr_1fr]' : 'md:grid-cols-[1fr_1.1fr]'}`}>
+      {isImageLeft && (
+        <div class="order-1">
+          <TiltCard client:load className="aspect-[16/10] shadow-2xl">
+            <img src={image} alt="" class="w-full h-full object-cover" loading="lazy" />
+          </TiltCard>
+        </div>
+      )}
+
+      <div class={`${isImageLeft ? 'order-2' : 'order-1'} max-w-2xl`}>
+        {kicker && <p class={`kicker ${theme === 'dark' ? 'text-white/70' : 'text-violet-700'}`}>{kicker}</p>}
+        <h2 class={`h2 ${textColor}`}>{heading}</h2>
+        {body && <p class={`p mt-3 ${subColor}`}>{body}</p>}
+      </div>
+
+      {!isImageLeft && (
+        <div class="order-2">
+          <TiltCard client:load className="aspect-[16/10] shadow-2xl">
+            <img src={image} alt="" class="w-full h-full object-cover" loading="lazy" />
+          </TiltCard>
+        </div>
+      )}
+    </div>
+  </div>
+</section>

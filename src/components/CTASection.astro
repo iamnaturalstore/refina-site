@@ -1,0 +1,21 @@
+---
+export interface Props {
+  theme?: 'dark' | 'light';
+  heading: string;
+  primaryCta?: { label: string; href: string };
+  secondaryCta?: { label: string; href: string };
+}
+const { theme = 'dark', heading, primaryCta, secondaryCta } = Astro.props;
+const bg = theme === 'dark' ? 'bg-[#0a1830]' : 'bg-white';
+const title = theme === 'dark' ? 'text-white' : 'text-gray-900';
+---
+<section class={`relative ${bg} py-24 md:py-32`}>
+  {theme === 'dark' && <div class="hero-noise absolute inset-0 opacity-40 pointer-events-none"></div>}
+  <div class="container-max relative text-center">
+    <h2 class={`h2 ${title}`}>{heading}</h2>
+    <div class="mt-8 flex items-center justify-center gap-3">
+      {primaryCta && <a href={primaryCta.href} class="btn-primary">{primaryCta.label}</a>}
+      {secondaryCta && <a href={secondaryCta.href} class="btn-ghost text-white/90 hover:bg-white/10">{secondaryCta.label}</a>}
+    </div>
+  </div>
+</section>

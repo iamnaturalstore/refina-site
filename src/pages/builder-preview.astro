@@ -1,5 +1,5 @@
 ---
-// src/pages/builder-preview.astro
+// Minimal, robust Builder.io preview page for Astro (no rewrites, no inline JS).
 
 const key = import.meta.env.PUBLIC_BUILDER_API_KEY;
 
@@ -17,11 +17,10 @@ try {
 if (!targetUrl.startsWith("/")) targetUrl = "/" + targetUrl;
 while (targetUrl.length > 1 && targetUrl.startsWith("//")) targetUrl = targetUrl.slice(1);
 
-// Support forcing a specific entry (bypasses targeting)
-// Usage: /builder-preview?url=/&entry=ENTRY_ID
+// Optional: force a specific entry (bypasses targeting completely)
 const entry = (params.get("entry") || "").trim();
 
-// Send BOTH attributes so either style matches
+// Send BOTH attributes; your space matches on urlPath
 const userAttributes = JSON.stringify({ url: targetUrl, urlPath: targetUrl });
 ---
 
@@ -31,57 +30,17 @@ const userAttributes = JSON.stringify({ url: targetUrl, urlPath: targetUrl });
     <title>Builder Preview</title>
     <meta name="robots" content="noindex, nofollow" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <style>
-      html, body { height: 100%; margin: 0; }
-      body {
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      }
-      .root { min-height: 100%; display: grid; }
-      #status {
-        position: fixed; bottom: 8px; left: 8px; font: 12px/1.4 ui-sans-serif, system-ui;
-        background: #fff; padding: 6px 8px; border: 1px solid #ddd; border-radius: 6px;
-        box-shadow: 0 1px 4px rgba(0,0,0,.06); color: #333; z-index: 9999; display: none;
-      }
-    </style>
   </head>
   <body>
-    <div class="root">
-      <builder-component
-        model={model}
-        api-key={key}
-        data-url={targetUrl}
-        user-attributes={userAttributes}
-        entry={entry}        <!-- empty = ignored; if set = bypass targeting -->
-        preview
-      ></builder-component>
-    </div>
+    <builder-component
+      model={model}
+      api-key={key}
+      data-url={targetUrl}
+      user-attributes={userAttributes}
+      entry={entry}
+      preview
+    ></builder-component>
 
     <script src="https://cdn.builder.io/js/webcomponents"></script>
-
-    <!-- Minimal diagnostics (only shows if something's off) -->
-    <div id="status"></div>
-    <script is:inline>
-      (function () {
-        function say(msg) {
-          try {
-            console.warn('[builder-preview]', msg);
-            var el = document.getElementById('status');
-            if (el) { el.style.display = 'block'; el.textContent = msg; }
-          } catch (e) {}
-        }
-        var comp = document.querySelector('builder-component');
-        if (!comp) return say('builder-component missing');
-
-        // After 2s, surface common issues
-        setTimeout(function () {
-          if (comp.classList.contains('builder-no-content-found')) {
-            var ua = comp.getAttribute('user-attributes');
-            say('No content found. Check targeting/publish, or pass &entry=ENTRY_ID. user-attributes=' + ua);
-          }
-        }, 2000);
-      })();
-    </script>
   </body>
 </html>

@@ -1,12 +1,6 @@
 ---
-// src/pages/builder-preview.astro
-/**
- * Safe Builder.io preview page for Astro (no URL rewrites).
- */
-
 const key = import.meta.env.PUBLIC_BUILDER_API_KEY;
 
-// Query params
 const params = new URL(Astro.request.url).searchParams;
 const incomingModel = (params.get("model") || "").trim().toLowerCase();
 const model = ["page", "section", "symbol"].includes(incomingModel) ? incomingModel : "page";
@@ -20,6 +14,9 @@ try {
 } catch {}
 if (!targetUrl.startsWith("/")) targetUrl = "/" + targetUrl;
 while (targetUrl.length > 1 && targetUrl.startsWith("//")) targetUrl = targetUrl.slice(1);
+
+// Prepare userAttributes for Builder targeting (send BOTH url and urlPath)
+const userAttributes = JSON.stringify({ url: targetUrl, urlPath: targetUrl });
 ---
 
 <html lang="en">
@@ -30,17 +27,8 @@ while (targetUrl.length > 1 && targetUrl.startsWith("//")) targetUrl = targetUrl
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
       html, body { height: 100%; margin: 0; }
-      body {
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      }
+      body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
       .preview-root { min-height: 100%; display: grid; }
-      #builder-preview-status {
-        position: fixed; bottom: 8px; left: 8px; font: 12px/1.4 ui-sans-serif, system-ui;
-        background: #fff; padding: 6px 8px; border: 1px solid #ddd; border-radius: 6px;
-        box-shadow: 0 1px 4px rgba(0,0,0,.06); color: #333; z-index: 9999; display:none;
-      }
     </style>
   </head>
   <body>
@@ -49,40 +37,11 @@ while (targetUrl.length > 1 && targetUrl.startsWith("//")) targetUrl = targetUrl
         model={model}
         api-key={key}
         data-url={targetUrl}
+        user-attributes={userAttributes}
         preview
       ></builder-component>
     </div>
 
-    <!-- Builder web components -->
     <script src="https://cdn.builder.io/js/webcomponents"></script>
-
-    <!-- Minimal diagnostics (shows only if something is wrong) -->
-    <script is:inline>
-      (function () {
-        function show(msg) {
-          try {
-            console.warn('[builder-preview]', msg);
-            var el = document.getElementById('builder-preview-status');
-            if (el) { el.style.display = 'block'; el.textContent = msg; }
-          } catch (e) {}
-        }
-        var comp = document.querySelector('builder-component');
-        if (!comp) return show('builder-component missing');
-        var key = comp.getAttribute('api-key');
-        if (!key) show('Missing PUBLIC_BUILDER_API_KEY on builder-component.');
-
-        // If no content renders within 3s, surface a hint.
-        setTimeout(function () {
-          try {
-            // Builder sets class "builder-no-content-found" when API returns empty results
-            if (comp.classList.contains('builder-no-content-found')) {
-              show('No content found for model="' + comp.getAttribute('model') + '" at url="' + comp.getAttribute('data-url') + '". Check URL targeting and publish status in Builder.');
-            }
-          } catch (e) {}
-        }, 3000);
-      })();
-    </script>
-
-    <div id="builder-preview-status"></div>
   </body>
 </html>
